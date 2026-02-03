@@ -57,8 +57,7 @@ const login=async(req,res)=>{
 }
 const getUsers=async(req,res)=>{
   try {
-     console.log("Called allUsers")
-     console.log(req.user)
+    
     const role=req.user.role;
     if(role!=="admin"){
       return res.status(403).json({success:false,message:"Access Denied:Admin only"})
@@ -71,7 +70,7 @@ const getUsers=async(req,res)=>{
 }
 const getUserById=async(req,res)=>{
   try {
-     console.log("Called getUserById")
+     
     const id=req.params.id;
     if(req.user.role!=="admin"){
       return res.status(403).json({success:false,message:"Access Denied:Admin only"})
@@ -87,7 +86,7 @@ const getUserById=async(req,res)=>{
 }
 const getCurrentUser=async(req,res)=>{
   try{
-  console.log("Called getCirr")
+  
   const email=req.user.email
   const user=await User.findOne({email})
     res.status(200).json({success:true,message:"User fetched successfully",user:user})
@@ -97,7 +96,7 @@ const getCurrentUser=async(req,res)=>{
 }
 const updateUserByEmail = async (req, res) => {
   try {
-    console.log("Called updateByEmail")
+  
     const email = req.user.email;
 
     const updatedUser = await User.findOneAndUpdate(
@@ -145,7 +144,7 @@ const updateUserByEmail = async (req, res) => {
 
 const updateUserById=async(req,res)=>{
   try {
-    console.log("Called updateByid")
+    
     const id=req.params.id;
     const role=req.user.role;
     if(role!=="admin"){
@@ -168,7 +167,7 @@ const updateUserById=async(req,res)=>{
 }
 const deleteUserById = async (req, res) => {
   try {
-    console.log("Delete user by id");
+    
 
     const id = req.params.id;
     const role = req.user.role;
