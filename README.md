@@ -1,25 +1,22 @@
-User CRUD API (In-Memory)
 📌 Overview
 
-This project is a simple REST API that performs basic CRUD (Create, Read, Update, Delete) operations on a User resource using in-memory storage (HashMap-style object).
+This project is a RESTful API that implements JWT-based authentication and role-based authorization for secure access control.
 
-No database is used. Data exists only while the server is running.
+The API allows users to register and log in, generates JSON Web Tokens (JWT), and restricts access to specific endpoints based on user roles such as Admin and User.
+
+This project focuses on authentication, authorization, and backend security fundamentals.
 
 ✨ Features
 
-Create a user
+User registration and login
 
-Get all users
+JWT-based authentication
 
-Get a user by ID
+Role-based access control (Admin / User)
 
-Update user details (partial updates supported)
+Protected routes using middleware
 
-Delete a user
-
-Email format validation
-
-Email uniqueness check
+Secure password handling
 
 Proper HTTP status codes and error handling
 
@@ -27,13 +24,15 @@ Proper HTTP status codes and error handling
 
 Each user contains:
 
-id (UUID)
+id (MongoDB ObjectId)
 
 name (string)
 
-email (string)
+email (string, unique)
 
-age (number)
+password (string, hashed)
+
+role (string: admin / user)
 
 🛠 Tech Stack
 
@@ -41,81 +40,80 @@ Node.js
 
 Express.js
 
-In-memory HashMap (JavaScript Object)
+MongoDB
 
-UUID
+Mongoose
 
-Swagger (API Documentation)
+JSON Web Token (JWT)
+
+bcrypt
+
+🔐 Authentication & Authorization Flow
+
+User registers with email and password
+
+Password is hashed and stored securely
+
+User logs in and receives a JWT
+
+JWT is sent in request headers
+
+Middleware verifies token validity
+
+Role-based middleware checks user permissions
 
 🚀 Running the Application
 
 Install dependencies
 
+npm install
+
+
+Configure environment variables
+
+MONGO_URI=your_mongodb_url
+JWT_SECRET=your_secret_key
+
+
 Start the server
 
-Open Swagger UI to test APIs
-
-⚠️ Note: Data is stored in memory and will be lost on server restart.
+npm start
 
 📚 API Endpoints
-Method	Endpoint	Description
-POST	/users	Create a new user
-GET	/users	Get all users
-GET	/users/{id}	Get user by ID
-PATCH	/users/{id}	Update user details
-DELETE	/users/{id}	Delete user
-📥 GET /users – Get All Users
-Description
+Auth Routes
 
-Returns a list of all users stored in memory.
+POST /auth/register → Register a new user
 
-Response
+POST /auth/login → Login and receive JWT
 
-200 OK → List of users
+Protected Routes
 
-200 OK (empty list) → If no users exist
+GET /users → Accessible by Admin only
 
-Example Response
-[
-  {
-    "id": "uuid-1",
-    "name": "John",
-    "email": "john@gmail.com",
-    "age": 25
-  },
-  {
-    "id": "uuid-2",
-    "name": "Alice",
-    "email": "alice@gmail.com",
-    "age": 22
-  }
-]
+DELETE /users/:id → Admin only
 
-🧪 Validation & Error Handling
+GET /profile → Authenticated users
 
-Invalid email format → 400 Bad Request
+🧪 Error Handling
 
-Duplicate email → 400 Bad Request
+Invalid credentials → 401 Unauthorized
+
+Missing or invalid token → 401 Unauthorized
+
+Access denied (role-based) → 403 Forbidden
 
 User not found → 404 Not Found
 
-Successful delete → 204 No Content
-
 📝 Notes
 
-Uses in-memory hashmap for storage
+No Swagger documentation used
 
-Focused only on User CRUD
+No crypto module used
 
-No authentication or authorization
+Focused on JWT and role-based authorization
 
-Designed for interview and learning purposes
+Designed for internship and interview preparation
 
 📄 License
 
 Educational use only.
-
-🔹 GET /users – Minimal Method (for understanding)
-app.get('/users', (req, res) => {
-  res.status(200).json(Object.values(users));
-});
